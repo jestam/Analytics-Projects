@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[4]:
-
-
+#Import packages
 import pandas as pd
 import statistics
 import requests
@@ -16,6 +11,8 @@ max_temp_list = list()
 min_temp_list = list()
 max_dict = {}
 min_dict = {}
+
+#create list of locations to forecast
 location = ['Anchorage, USA', 'Buenos Aires, Argentina', 'Sao Jose dos Campos, Brazil',
             'San Jose, Costa Rica', 'Nanaimo, Canada', 'Ningbo, China', 'Giza, Egypt',
             'Mannheim, Germany', 'Hyderabad, India', 'Tehran, Iran', 'Bishkek, Kyrgyzstan',
@@ -23,6 +20,7 @@ location = ['Anchorage, USA', 'Buenos Aires, Argentina', 'Sao Jose dos Campos, B
             'Madrid, Spain', 'Oldham, England']
 output_direct = '/filepath/filename.csv'
 
+#for loop to loop through list of cities for API call
 for city in location:
     api_key = 'insertapikey'
     URL = 'https://api.openweathermap.org/data/2.5/forecast?'
@@ -38,6 +36,7 @@ for city in location:
     if response.status_code == 200:  # Success
         data = response.json()
         day_count = 1
+        #if last day of the month, next day is first of the next month
         if dt.day == 28 and month == 2:
             day = 1
             day0 = 28
@@ -60,10 +59,10 @@ for city in location:
             yr_mth_day = dt_tm[0].split('-')  # Split the YYYY-mm-dd string into a list [ YYYY, mm, dd ]
             cur_day = int(yr_mth_day[2])  # Extract the block's month & day from the [ YYYY, mm, dd ] list as an integer
             
-            if cur_day == (day - 1):
+            if cur_day == (day - 1): # If day is not end of month, continue
                 continue
                 
-            elif cur_day == day0 + 6:
+            elif cur_day == day0 + 6: # If more than 5 days, end loop
                 break
                 
             elif day != cur_day:  # If the block's day isn't the same as today's day
@@ -91,7 +90,8 @@ for city in location:
                 min_dict[city].update({'Min ' + str(day_count): min_temp})
 
 final_dict = {}
-    
+
+#get max and min temp
 for c in min_dict:
     final_dict[c] = {}
     for i in min_dict[c]:
@@ -102,11 +102,13 @@ for c in min_dict:
             else:
                 continue
 
+#get max & min avg
 for i in final_dict:
     final_dict[i].update({'Min Avg': statistics.mean(min_dict[i].values())})
     final_dict[i].update({'Max Avg': statistics.mean(max_dict[i].values())})
 print(final_dict)
-    
+
+#make into dataframe to export as csv file
 df = pd.DataFrame.from_dict(final_dict, orient='index')
 df.index.name = 'city'
 df = df.reset_index()
