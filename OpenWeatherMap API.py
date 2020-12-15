@@ -21,10 +21,10 @@ location = ['Anchorage, USA', 'Buenos Aires, Argentina', 'Sao Jose dos Campos, B
             'Mannheim, Germany', 'Hyderabad, India', 'Tehran, Iran', 'Bishkek, Kyrgyzstan',
             'Riga, Latvia', 'Quetta, Pakistan', 'Warsaw, Poland', 'Dhahran, Saudia Arabia',
             'Madrid, Spain', 'Oldham, England']
-output_direct = '/Users/jessietam/Desktop/Tam_PythonHW1.csv'
+output_direct = '/filepath/filename.csv'
 
 for city in location:
-    api_key = '858a46c0d9dbce92cd4e99db950e6131'
+    api_key = 'insertapikey'
     URL = 'https://api.openweathermap.org/data/2.5/forecast?'
     
     if city.count(' ') == 1:
@@ -111,10 +111,3 @@ df = pd.DataFrame.from_dict(final_dict, orient='index')
 df.index.name = 'city'
 df = df.reset_index()
 df.to_csv(output_direct, float_format='%.2f', index=False)
-
-
-# In[ ]:
-
-
-
-
