@@ -15,7 +15,7 @@ from lifelines.statistics import logrank_test
 
 
 #import data
-heart = pd.read_csv("/Users/jessietam/Desktop/heart_failure_clinical_records_dataset.csv")
+heart = pd.read_csv("/filepath/heart_failure_clinical_records_dataset.csv")
 
 
 
